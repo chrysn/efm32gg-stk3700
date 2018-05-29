@@ -1,0 +1,11 @@
+[build]
+target = "thumbv7m-none-eabi"
+
+# from cortex-m-quickstart:
+
+[target.thumbv7m-none-eabi]
+runner = '.cargo/gdb-wrapper'
+rustflags = [
+  "-C", "link-arg=-Wl,-Tlink.x",
+  "-C", "link-arg=-nostartfiles",
+]
