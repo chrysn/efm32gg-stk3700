@@ -6,7 +6,7 @@
 #[macro_use(entry, exception)]
 extern crate cortex_m_rt as rt;
 
-extern crate efm32gg990;
+extern crate efm32_stk3700;
 
 extern crate panic_semihosting;
 
@@ -15,22 +15,21 @@ use rt::ExceptionFrame;
 entry!(main);
 
 fn main() -> ! {
-    let p = efm32gg990::Peripherals::take().unwrap();
+    let board = efm32_stk3700::init();
+    let mut leds = board.leds;
+//     let buttons = board.buttons;
 
-    let cmu = p.CMU;
+    leds.led0_on();
 
-    if cmu.ctrl.read().hfxoboost().is_50pcent() { panic!("matches") }
-
-    cmu.hfperclken0.modify(|_, w| w.gpio().bit(true));
-    let gpio = p.GPIO;
-    // leds are pe2 and pe3
-    gpio.pe_model.modify(|_, w| w.mode2().pushpull());
-    gpio.pe_doutset.write(|w| unsafe { w.bits(1 << 2) });
-    // led1 not set to pushpull, but left at default (disabled w/ pullup)
-    gpio.pe_doutset.write(|w| unsafe { w.bits(1 << 3) });
-
-    // FIXME: not blinking yet
-    loop {}
+    loop {
+//         if !buttons.button0_pressed() {
+            leds.led1_on();
+//         }
+        leds.led1_off();
+        leds.led1_off();
+        leds.led1_off();
+        leds.led1_off();
+    }
 }
 
 // define the hard fault handler
