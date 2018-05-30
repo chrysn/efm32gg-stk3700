@@ -1,26 +1,23 @@
-use efm32gg990::{GPIO, CMU};
+use efm32gg_hal::gpio;
+use embedded_hal::digital::InputPin;
 
 pub struct Buttons {
-    // see led::LEDs comment
-    gpio: GPIO,
+    button0: gpio::PB9<gpio::Input>,
+    button1: gpio::PB10<gpio::Input>,
 }
 
 impl Buttons {
-    pub fn new(gpio: GPIO, cmu: &mut CMU) -> Self {
-        cmu.hfperclken0.modify(|_, w| w.gpio().bit(true));
-
-        gpio.pe_modeh.modify(|_, w| w.mode9().wiredor().mode10().wiredor());
-
-        Buttons { gpio }
+    pub fn new(pb9: gpio::PB9<gpio::Disabled>, pb10: gpio::PB10<gpio::Disabled>) -> Self {
+        Buttons { button0: pb9.as_input(), button1: pb10.as_input() }
     }
 
     pub fn button0_pressed(&self) -> bool
     {
-        self.gpio.pb_din.read().bits() & (1 << 9) != 0
+        self.button0.is_low()
     }
 
     pub fn button1_pressed(&self) -> bool
     {
-        self.gpio.pb_din.read().bits() & (1 << 10) != 0
+        self.button1.is_low()
     }
 }

@@ -1,4 +1,5 @@
-// This example uses no board support crate yet
+// This example uses no board support crate yet, but is the developer's base line for testing,
+// derived from the cortex-m-quickstart examples.
 
 #![no_main]
 #![no_std]

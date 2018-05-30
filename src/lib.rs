@@ -1,31 +1,31 @@
 #![no_std]
 
 extern crate efm32gg990;
-
-use efm32gg990::gpio;
+extern crate embedded_hal;
+extern crate efm32gg_hal;
 
 pub mod led;
 pub mod button;
 
-// As long as there is no abstraction that allows GPIO to be split, you can only have LEDs or
-// buttons
 pub struct Board {
     pub leds: led::LEDs,
-//     pub buttons: button::Buttons,
+    pub buttons: button::Buttons,
 }
 
 pub fn init() -> Board {
     let p = efm32gg990::Peripherals::take().unwrap();
 
     let mut cmu = p.CMU;
-    let mut gpio = p.GPIO;
+    let gpio = p.GPIO;
 
-    let leds = led::LEDs::new(gpio, &mut cmu);
+    let gpios = efm32gg_hal::gpio::split(gpio, &mut cmu);
 
-//     let buttons = button::Buttons::new(gpio, &mut cmu);
+    let leds = led::LEDs::new(gpios.pe2, gpios.pe3);
+
+    let buttons = button::Buttons::new(gpios.pb9, gpios.pb10);
 
     Board {
-        leds,
-//         buttons,
+        leds: leds,
+        buttons: buttons,
     }
 }

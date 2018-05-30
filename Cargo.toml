@@ -1,5 +1,5 @@
 [package]
-name = "efm32-stk3700"
+name = "efm32gg-stk3700"
 version = "0.1.0"
 authors = ["chrysn <chrysn@fsfe.org>"]
 
@@ -10,6 +10,9 @@ license = "MIT OR Apache-2.0"
 
 [dependencies]
 efm32gg990 = "*"
+embedded-hal = { version = "*", features = ["unproven"] }
+
+efm32gg-hal = { version = "0.1.0", git = "https://github.com/chrysn/efm32gg-hal" }
 
 # only for examples
 

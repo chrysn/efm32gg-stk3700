@@ -1,38 +1,33 @@
-use efm32gg990::{GPIO, CMU};
+use efm32gg_hal::gpio;
+use embedded_hal::digital::OutputPin;
 
 pub struct LEDs {
-    // Actually, we only need PE2 and PE3; a HAL could help us .split() that and retain ownership
-    // of only what we need.
-    gpio: GPIO,
+    led0: gpio::PE2<gpio::Output>,
+    led1: gpio::PE3<gpio::Output>,
 }
 
 impl LEDs {
-    pub fn new(gpio: GPIO, cmu: &mut CMU) -> Self {
-        cmu.hfperclken0.modify(|_, w| w.gpio().bit(true));
-
-        // the "Wired OR" mode drives active high
-        gpio.pe_model.modify(|_, w| w.mode2().wiredor().mode3().wiredor());
-
-        LEDs { gpio }
+    pub fn new(pe2: gpio::PE2<gpio::Disabled>, pe3: gpio::PE3<gpio::Disabled>) -> Self {
+        LEDs { led0: pe2.as_output(), led1: pe3.as_output() }
     }
 
     pub fn led0_on(&mut self)
     {
-        self.gpio.pe_doutset.write(|w| unsafe { w.bits(1 << 2) });
+        self.led0.set_high();
     }
 
     pub fn led0_off(&mut self)
     {
-        self.gpio.pe_doutclr.write(|w| unsafe { w.bits(1 << 2) });
+        self.led0.set_low();
     }
 
     pub fn led1_on(&mut self)
     {
-        self.gpio.pe_doutset.write(|w| unsafe { w.bits(1 << 3) });
+        self.led1.set_high();
     }
 
     pub fn led1_off(&mut self)
     {
-        self.gpio.pe_doutclr.write(|w| unsafe { w.bits(1 << 3) });
+        self.led1.set_low();
     }
 }
