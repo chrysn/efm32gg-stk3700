@@ -1,5 +1,6 @@
 use efm32gg_hal::gpio;
 use embedded_hal::digital::OutputPin;
+use efm32gg_hal::gpio::EFM32Pin;
 
 pub struct LEDs {
     led0: gpio::PE2<gpio::Output>,

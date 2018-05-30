@@ -1,5 +1,6 @@
 use efm32gg_hal::gpio;
 use embedded_hal::digital::InputPin;
+use efm32gg_hal::gpio::EFM32Pin;
 
 pub struct Buttons {
     button0: gpio::PB9<gpio::Input>,
