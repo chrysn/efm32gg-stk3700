@@ -8,6 +8,10 @@ description = "Board support crate for the EFM32GG-STK3700 Starter Kit"
 keywords = ["arm", "cortex-m", "efm32", "efm32gg"]
 license = "MIT OR Apache-2.0"
 
+readme = "README.md"
+repository = "https://github.com/chrysn/efm32gg-stk3700"
+# documentation = "https://docs.rs/efm32gg-stk3700" # only to be advertised when actually useful
+
 [dependencies]
 efm32gg990 = "0.1.1"
 embedded-hal = { version = "0.2.1", features = ["unproven"] }
