@@ -9,10 +9,10 @@ keywords = ["arm", "cortex-m", "efm32", "efm32gg"]
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-efm32gg990 = "*"
-embedded-hal = { version = "*", features = ["unproven"] }
+efm32gg990 = "0.1.1"
+embedded-hal = { version = "0.2.1", features = ["unproven"] }
 
-efm32gg-hal = { version = "0.1.0", git = "https://github.com/chrysn/efm32gg-hal" }
+efm32gg-hal = "0.1.0"
 
 # only for examples
 
