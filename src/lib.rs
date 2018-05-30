@@ -7,6 +7,8 @@ extern crate efm32gg_hal;
 pub mod led;
 pub mod button;
 
+use efm32gg_hal::gpio::GPIOExt;
+
 pub struct Board {
     pub leds: led::LEDs,
     pub buttons: button::Buttons,
@@ -16,9 +18,8 @@ pub fn init() -> Board {
     let p = efm32gg990::Peripherals::take().unwrap();
 
     let mut cmu = p.CMU;
-    let gpio = p.GPIO;
 
-    let gpios = efm32gg_hal::gpio::split(gpio, &mut cmu);
+    let gpios = p.GPIO.split(&mut cmu);
 
     let leds = led::LEDs::new(gpios.pe2, gpios.pe3);
 
