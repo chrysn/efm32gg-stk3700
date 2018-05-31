@@ -3,12 +3,12 @@ use embedded_hal::digital::OutputPin;
 use efm32gg_hal::gpio::EFM32Pin;
 
 pub struct LEDs {
-    led0: gpio::PE2<gpio::Output>,
-    led1: gpio::PE3<gpio::Output>,
+    led0: gpio::pins::PE2<gpio::Output>,
+    led1: gpio::pins::PE3<gpio::Output>,
 }
 
 impl LEDs {
-    pub fn new(pe2: gpio::PE2<gpio::Disabled>, pe3: gpio::PE3<gpio::Disabled>) -> Self {
+    pub fn new(pe2: gpio::pins::PE2<gpio::Disabled>, pe3: gpio::pins::PE3<gpio::Disabled>) -> Self {
         LEDs { led0: pe2.as_output(), led1: pe3.as_output() }
     }
 

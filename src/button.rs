@@ -3,12 +3,12 @@ use embedded_hal::digital::InputPin;
 use efm32gg_hal::gpio::EFM32Pin;
 
 pub struct Buttons {
-    button0: gpio::PB9<gpio::Input>,
-    button1: gpio::PB10<gpio::Input>,
+    button0: gpio::pins::PB9<gpio::Input>,
+    button1: gpio::pins::PB10<gpio::Input>,
 }
 
 impl Buttons {
-    pub fn new(pb9: gpio::PB9<gpio::Disabled>, pb10: gpio::PB10<gpio::Disabled>) -> Self {
+    pub fn new(pb9: gpio::pins::PB9<gpio::Disabled>, pb10: gpio::pins::PB10<gpio::Disabled>) -> Self {
         Buttons { button0: pb9.as_input(), button1: pb10.as_input() }
     }
 
