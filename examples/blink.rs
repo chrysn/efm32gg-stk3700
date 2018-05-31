@@ -31,11 +31,11 @@ fn main() -> ! {
     leds.led0_on();
 
     loop {
-        delay.delay_ms(500);
+        delay.delay_ms(500u16);
         if !buttons.button0_pressed() {
             leds.led1_on();
         }
-        delay.delay_ms(500);
+        delay.delay_ms(500u16);
         leds.led1_off();
     }
 }
