@@ -15,7 +15,10 @@ extern crate efm32gg_stk3700;
 
 extern crate panic_semihosting;
 
+extern crate embedded_hal;
+
 use rt::ExceptionFrame;
+use embedded_hal::blocking::delay::DelayMs;
 
 entry!(main);
 
@@ -23,16 +26,16 @@ fn main() -> ! {
     let board = efm32gg_stk3700::init();
     let mut leds = board.leds;
     let buttons = board.buttons;
+    let mut delay = board.delay;
 
     leds.led0_on();
 
     loop {
+        delay.delay_ms(500);
         if !buttons.button0_pressed() {
             leds.led1_on();
         }
-        leds.led1_off();
-        leds.led1_off();
-        leds.led1_off();
+        delay.delay_ms(500);
         leds.led1_off();
     }
 }

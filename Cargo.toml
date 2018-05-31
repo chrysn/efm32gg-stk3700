@@ -13,7 +13,8 @@ repository = "https://github.com/chrysn/efm32gg-stk3700"
 # documentation = "https://docs.rs/efm32gg-stk3700" # only to be advertised when actually useful
 
 [dependencies]
-efm32gg990 = "0.1.1"
+cortex-m = "0.5.2"
+efm32gg990 = "0.1.2"
 embedded-hal = { version = "0.2.1", features = ["unproven"] }
 
 efm32gg-hal = "0.1.0"

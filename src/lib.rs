@@ -1,5 +1,6 @@
 #![no_std]
 
+extern crate cortex_m;
 extern crate efm32gg990;
 extern crate embedded_hal;
 extern crate efm32gg_hal;
@@ -7,14 +8,20 @@ extern crate efm32gg_hal;
 pub mod led;
 pub mod button;
 
-use efm32gg_hal::gpio::GPIOExt;
+use efm32gg_hal::{
+    gpio::GPIOExt,
+    cmu::CMUExt,
+    systick::SystickExt,
+};
 
 pub struct Board {
     pub leds: led::LEDs,
     pub buttons: button::Buttons,
+    pub delay: efm32gg_hal::systick::SystickDelay,
 }
 
 pub fn init() -> Board {
+    let corep = cortex_m::peripheral::Peripherals::take().unwrap();
     let p = efm32gg990::Peripherals::take().unwrap();
 
     let mut cmu = p.CMU;
@@ -25,8 +32,15 @@ pub fn init() -> Board {
 
     let buttons = button::Buttons::new(gpios.pb9, gpios.pb10);
 
+    let cmu = cmu.constrain();
+    let hfcoreclk = cmu.split().hfcoreclk;
+    let syst = corep.SYST.constrain();
+
+    let delay = efm32gg_hal::systick::SystickDelay::new(syst, hfcoreclk);
+
     Board {
         leds: leds,
         buttons: buttons,
+        delay: delay,
     }
 }
