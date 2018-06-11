@@ -1,5 +1,7 @@
-// This example uses no board support crate yet, but is the developer's base line for testing,
-// derived from the cortex-m-quickstart examples.
+//! This example uses no board support crate yet, but is the developer's base line for testing,
+//! derived from the cortex-m-quickstart examples.
+//!
+//! It does nothing, just idles in an infinite loop.
 
 #![no_main]
 #![no_std]

@@ -10,7 +10,7 @@ license = "MIT OR Apache-2.0"
 
 readme = "README.md"
 repository = "https://github.com/chrysn/efm32gg-stk3700"
-# documentation = "https://docs.rs/efm32gg-stk3700" # only to be advertised when actually useful
+documentation = "https://docs.rs/efm32gg-stk3700"
 
 [dependencies]
 cortex-m = "0.5.2"

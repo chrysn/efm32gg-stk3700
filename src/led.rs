@@ -2,6 +2,7 @@ use efm32gg_hal::gpio;
 use embedded_hal::digital::OutputPin;
 use efm32gg_hal::gpio::EFM32Pin;
 
+/// A representation of the two user LEDs on the STK3700
 pub struct LEDs {
     led0: gpio::pins::PE2<gpio::Output>,
     led1: gpio::pins::PE3<gpio::Output>,
