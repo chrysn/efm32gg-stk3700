@@ -49,6 +49,10 @@ use efm32gg_hal::{
     systick::SystickExt,
 };
 
+/// A representation of all the board's peripherals.
+///
+/// While all its parts can be easily constructed on their own, instanciating the full board takes
+/// care of obtaining the low-level peripherals and moving the right pins to the right devices.
 pub struct Board {
     pub leds: led::LEDs,
     pub buttons: button::Buttons,
@@ -56,47 +60,48 @@ pub struct Board {
     pub lcd: lcd::LCD,
 }
 
-/// Initialize the board
-///
-/// This does little configuration, but primarily ``take``s the system and EFM32 peripherals and
-/// distributes them to the the suitable abstractions for the board.
-///
-/// Peripherals that are not part of the defined board are lost when the structs are taken apart.
-/// The current recommendation for composite devices (ie. "The STK3700 with something actually
-/// connected to the extension header or breakoutp pins") is to not use this function but rather
-/// look at its code, replicate what is needed and add in the composite board's additional devices
-/// in a new board initialization function. The author is open to suggestions as to how that would
-/// be done better.
+impl Board {
+    /// Initialize the board
+    ///
+    /// This does little configuration, but primarily ``take``s the system and EFM32 peripherals and
+    /// distributes them to the the suitable abstractions for the board.
+    ///
+    /// Peripherals that are not part of the defined board are lost when the structs are taken apart.
+    /// The current recommendation for composite devices (ie. "The STK3700 with something actually
+    /// connected to the extension header or breakoutp pins") is to not use this function but rather
+    /// look at its code, replicate what is needed and add in the composite board's additional devices
+    /// in a new board initialization function. The author is open to suggestions as to how that would
+    /// be done better.
+    pub fn new() -> Self {
+        let corep = cortex_m::peripheral::Peripherals::take().unwrap();
+        let p = efm32gg990::Peripherals::take().unwrap();
 
-pub fn init() -> Board {
-    let corep = cortex_m::peripheral::Peripherals::take().unwrap();
-    let p = efm32gg990::Peripherals::take().unwrap();
+        let mut cmu = p.CMU;
 
-    let mut cmu = p.CMU;
+        let gpios = p.GPIO.split(&mut cmu);
 
-    let gpios = p.GPIO.split(&mut cmu);
+        let lcd = lcd::LCD::new(
+            gpios.pe5,
+            gpios.pe4,
+            gpios.pa15,
+            gpios.pd9,
+        );
 
-    let lcd = lcd::LCD::new(
-        gpios.pe5,
-        gpios.pe4,
-        gpios.pa15,
-        gpios.pd9,
-    );
+        let leds = led::LEDs::new(gpios.pe2, gpios.pe3);
 
-    let leds = led::LEDs::new(gpios.pe2, gpios.pe3);
+        let buttons = button::Buttons::new(gpios.pb9, gpios.pb10);
 
-    let buttons = button::Buttons::new(gpios.pb9, gpios.pb10);
+        let cmu = cmu.constrain();
+        let hfcoreclk = cmu.split().hfcoreclk;
+        let syst = corep.SYST.constrain();
 
-    let cmu = cmu.constrain();
-    let hfcoreclk = cmu.split().hfcoreclk;
-    let syst = corep.SYST.constrain();
+        let delay = efm32gg_hal::systick::SystickDelay::new(syst, hfcoreclk);
 
-    let delay = efm32gg_hal::systick::SystickDelay::new(syst, hfcoreclk);
-
-    Board {
-        leds: leds,
-        buttons: buttons,
-        delay: delay,
-        lcd: lcd,
+        Board {
+            leds: leds,
+            buttons: buttons,
+            delay: delay,
+            lcd: lcd,
+        }
     }
 }

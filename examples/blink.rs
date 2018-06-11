@@ -25,7 +25,7 @@ use embedded_hal::blocking::delay::DelayMs;
 entry!(main);
 
 fn main() -> ! {
-    let board = efm32gg_stk3700::init();
+    let board = efm32gg_stk3700::Board::new();
     let mut leds = board.leds;
     let buttons = board.buttons;
     let mut delay = board.delay;

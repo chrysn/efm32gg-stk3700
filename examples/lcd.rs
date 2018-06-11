@@ -21,7 +21,7 @@ use rt::ExceptionFrame;
 entry!(main);
 
 fn main() -> ! {
-    let board = efm32gg_stk3700::init();
+    let board = efm32gg_stk3700::Board::new();
     let mut lcd = board.lcd;
 
     loop {
