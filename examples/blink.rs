@@ -7,7 +7,6 @@
 
 #![no_main]
 #![no_std]
-#![feature(lang_items)]
 
 #[macro_use(entry, exception)]
 extern crate cortex_m_rt as rt;
@@ -15,6 +14,8 @@ extern crate cortex_m_rt as rt;
 extern crate efm32gg_stk3700;
 
 extern crate embedded_hal;
+
+extern crate panic_semihosting;
 
 use rt::ExceptionFrame;
 use embedded_hal::blocking::delay::DelayMs;
@@ -51,18 +52,4 @@ exception!(*, default_handler);
 
 fn default_handler(irqn: i16) {
     panic!("Unhandled exception (IRQn = {})", irqn);
-}
-
-// For any non-minimal demo, and especially during development, you'll likely rather use this
-// crate and remove everything below here and the lang_items feature.
-//
-// extern crate panic_semihosting;
-
-#[lang="panic_fmt"]
-extern fn panic_fmt() -> ! {
-    loop {}
-}
-#[no_mangle]
-pub fn rust_begin_unwind() -> ! {
-    loop {}
 }

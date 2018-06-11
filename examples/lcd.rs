@@ -7,7 +7,6 @@
 
 #![no_main]
 #![no_std]
-#![feature(lang_items)]
 
 #[macro_use(entry, exception)]
 extern crate cortex_m_rt as rt;
